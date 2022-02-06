@@ -8,7 +8,7 @@ setuptools.setup(
     description='Authenticate to Dash app using Auth0',
     long_description=open('README.md', 'rt').read().strip(),
     long_description_content_type='text/markdown',
-    url='tobedone',
+    url='https://github.com/dbrambilla13/dash-auth0-auth',
     packages=['dash_auth0_oauth'],
     install_requires=[
         'dash>=2.1.0',
