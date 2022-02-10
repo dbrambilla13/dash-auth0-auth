@@ -7,6 +7,12 @@ Upon authentication, a cookie is created and kept for 2 weeks.
 ### Setup
 Setup an Auth0 tenant and application.
 
+Add <your_app_base_url>/login/callback as allowed callback url and <your_app_base_url> as allowed logout url in the Auth0 Application settings.
+For example:
+
+    allowed callback url: https://www.myapp.com/login/callback
+    allowed logout url:   https://www.myapp.com
+
 Install the package:
 ```
 $ pip install dash-auth0-oauth
@@ -18,7 +24,6 @@ FLASK_SECRET_KEY
 AUTH0_AUTH_URL
 AUTH0_AUTH_SCOPE
 AUTH0_AUTH_TOKEN_URI
-AUTH0_AUTH_REDIRECT_URI
 AUTH0_AUTH_USER_INFO_URL
 AUTH0_AUTH_CLIENT_ID
 AUTH0_AUTH_CLIENT_SECRET
@@ -31,7 +36,6 @@ FLASK_SECRET_KEY="<some secret key>"
 AUTH0_AUTH_URL="https://<your tenant url>/authorize"
 AUTH0_AUTH_SCOPE="openid profile email"
 AUTH0_AUTH_TOKEN_URI="https://<your tenant url>/oauth/token"
-AUTH0_AUTH_REDIRECT_URI="http://localhost:8080/login/callback"
 AUTH0_AUTH_USER_INFO_URL="https://<your tenant url>/userinfo"
 AUTH0_AUTH_CLIENT_ID="<your app client id>"
 AUTH0_AUTH_CLIENT_SECRET="<your app client secret>"

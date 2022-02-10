@@ -4,7 +4,8 @@ import flask
 from authlib.integrations.requests_client import OAuth2Session
 
 from flask import url_for
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urljoin
+
 
 from .auth import Auth
 
@@ -16,8 +17,8 @@ AUTH_STATE_KEY = 'auth_state'
 
 CLIENT_ID = os.environ.get('AUTH0_AUTH_CLIENT_ID')
 CLIENT_SECRET = os.environ.get('AUTH0_AUTH_CLIENT_SECRET')
-AUTH_REDIRECT_URI = os.environ.get('AUTH0_AUTH_REDIRECT_URI')
 LOGOUT_URL = os.environ.get('AUTH0_LOGOUT_URL')
+AUTH_REDIRECT_URI = '/login/callback'
 
 class Auth0Auth(Auth):
     def __init__(self, app):
@@ -41,13 +42,16 @@ class Auth0Auth(Auth):
         return flask.session.get(user) == token
 
     def login_request(self):
+        
+        redirect_uri = urljoin(flask.request.base_url, AUTH_REDIRECT_URI) 
+
         session = OAuth2Session(
             CLIENT_ID,
             CLIENT_SECRET,
             scope=os.environ.get('AUTH0_AUTH_SCOPE'),
-            redirect_uri=AUTH_REDIRECT_URI
+            redirect_uri=redirect_uri
         )
-
+        
         uri, state = session.create_authorization_url(os.environ.get('AUTH0_AUTH_URL'))
 
         flask.session['REDIRECT_URL'] = flask.request.url
@@ -115,11 +119,11 @@ class Auth0Auth(Auth):
             return OAuth2Session(
                 CLIENT_ID,
                 state=state,
-                redirect_uri=AUTH_REDIRECT_URI
+                redirect_uri=urljoin(flask.request.base_url, AUTH_REDIRECT_URI)
             )
         return OAuth2Session(
             CLIENT_ID,
-            redirect_uri=AUTH_REDIRECT_URI,
+            redirect_uri=urljoin(flask.request.base_url, AUTH_REDIRECT_URI),
         )
 
     @staticmethod
