@@ -28,6 +28,7 @@ AUTH0_AUTH_USER_INFO_URL
 AUTH0_AUTH_CLIENT_ID
 AUTH0_AUTH_CLIENT_SECRET
 AUTH0_LOGOUT_URL
+AUTH0_API_AUDIENCE
 ```
 for example using [python-dotenv](https://pypi.org/project/python-dotenv/):
 ```
@@ -40,6 +41,7 @@ AUTH0_AUTH_USER_INFO_URL="https://<your tenant url>/userinfo"
 AUTH0_AUTH_CLIENT_ID="<your app client id>"
 AUTH0_AUTH_CLIENT_SECRET="<your app client secret>"
 AUTH0_LOGOUT_URL="https://<your tenant url>/v2/logout"
+AUTH0_API_AUDIENCE="<your_api_audience_identifier>"
 ```
 Add it to the application:
 ```
