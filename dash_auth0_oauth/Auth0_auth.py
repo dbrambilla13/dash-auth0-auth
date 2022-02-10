@@ -49,10 +49,13 @@ class Auth0Auth(Auth):
             CLIENT_ID,
             CLIENT_SECRET,
             scope=os.environ.get('AUTH0_AUTH_SCOPE'),
-            redirect_uri=redirect_uri
+            redirect_uri=redirect_uri            
         )
         
-        uri, state = session.create_authorization_url(os.environ.get('AUTH0_AUTH_URL'))
+        uri, state = session.create_authorization_url(
+            os.environ.get('AUTH0_AUTH_URL'), 
+            audience=os.environ.get('AUTH0_API_AUDIENCE')
+        )
 
         flask.session['REDIRECT_URL'] = flask.request.url
         flask.session[AUTH_STATE_KEY] = state
@@ -96,6 +99,8 @@ class Auth0Auth(Auth):
                     client_secret=CLIENT_SECRET,
                     authorization_response=flask.request.url
                 )
+                print(token['id_token'])
+                print(token['access_token'])
             except Exception as e:
                 return e.__dict__
 
