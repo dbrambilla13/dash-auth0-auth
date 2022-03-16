@@ -59,7 +59,7 @@ class Auth0Auth(Auth):
 
         flask.session['REDIRECT_URL'] = flask.request.url
         flask.session[AUTH_STATE_KEY] = state
-        flask.session.permanent = True
+        flask.session.permanent = False
 
         return flask.redirect(uri, code=302)
 
