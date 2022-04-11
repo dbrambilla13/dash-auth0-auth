@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name='dash-auth0-oauth',
-    version='0.1.3',
+    version='0.1.4',
     author='Daniele Brambilla',
     author_email='daniele.bram@gmail.com',
     description='Authenticate to Dash app using Auth0',

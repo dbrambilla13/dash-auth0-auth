@@ -20,6 +20,8 @@ CLIENT_SECRET = os.environ.get('AUTH0_AUTH_CLIENT_SECRET')
 LOGOUT_URL = os.environ.get('AUTH0_LOGOUT_URL')
 AUTH_REDIRECT_URI = '/login/callback'
 
+AUTH_FLASK_ROUTES = bool(os.environ.get('AUTH_FLASK_ROUTES','false'))
+
 class Auth0Auth(Auth):
     def __init__(self, app):
         Auth.__init__(self, app)
@@ -30,7 +32,7 @@ class Auth0Auth(Auth):
         def callback():
             return self.login_callback()
 
-        @app.server.route('/logout')
+        @app.server.route('/logout/')
         def logout():
             return self.logout()
 
@@ -65,9 +67,9 @@ class Auth0Auth(Auth):
 
     def auth_wrapper(self, f):
         def wrap(*args, **kwargs):
-            if not self.is_authorized():
-                return flask.Response(status=403)
-
+            if AUTH_FLASK_ROUTES:
+                if not self.is_authorized():
+                    return flask.Response(status=403)
             response = f(*args, **kwargs)
             return response
 
@@ -79,7 +81,6 @@ class Auth0Auth(Auth):
                 return original_index(*args, **kwargs)
             else:
                 return self.login_request()
-
         return wrap
 
     def login_callback(self):
