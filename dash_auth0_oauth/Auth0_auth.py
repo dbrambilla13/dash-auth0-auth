@@ -6,6 +6,8 @@ from authlib.integrations.requests_client import OAuth2Session
 from flask import url_for
 from urllib.parse import urlencode, urljoin
 
+from requests import request
+
 
 from .auth import Auth
 
@@ -20,7 +22,14 @@ CLIENT_SECRET = os.environ.get('AUTH0_AUTH_CLIENT_SECRET')
 LOGOUT_URL = os.environ.get('AUTH0_LOGOUT_URL')
 AUTH_REDIRECT_URI = '/login/callback'
 
-AUTH_FLASK_ROUTES = bool(os.environ.get('AUTH_FLASK_ROUTES','false'))
+AUTH_FLASK_ROUTES = os.environ.get('AUTH_FLASK_ROUTES',"false")
+if AUTH_FLASK_ROUTES == "true":
+    AUTH_FLASK_ROUTES = True
+if AUTH_FLASK_ROUTES == "false":
+    AUTH_FLASK_ROUTES = False
+else:
+    print(f"warning: AUTH_FLASK_ROUTES is set to {AUTH_FLASK_ROUTES}. Must be 'true' or 'false', otherwise will raise this warning and be set to False.")
+    AUTH_FLASK_ROUTES = False
 
 class Auth0Auth(Auth):
     def __init__(self, app):
@@ -139,7 +148,8 @@ class Auth0Auth(Auth):
         flask.session.clear()
         
         # Redirect user to logout endpoint
-        params = {'returnTo': url_for('/', _external=True), 'client_id': CLIENT_ID}
+        return_url = flask.request.host_url
+        params = {'returnTo': return_url, 'client_id': CLIENT_ID}
         r = flask.redirect(LOGOUT_URL + '?' + urlencode(params))
         r.delete_cookie(COOKIE_AUTH_USER_NAME)
         r.delete_cookie(COOKIE_AUTH_ACCESS_TOKEN)
