@@ -25,7 +25,7 @@ AUTH_REDIRECT_URI = '/login/callback'
 AUTH_FLASK_ROUTES = os.environ.get('AUTH_FLASK_ROUTES',"false")
 if AUTH_FLASK_ROUTES == "true":
     AUTH_FLASK_ROUTES = True
-if AUTH_FLASK_ROUTES == "false":
+elif AUTH_FLASK_ROUTES == "false":
     AUTH_FLASK_ROUTES = False
 else:
     print(f"warning: AUTH_FLASK_ROUTES is set to {AUTH_FLASK_ROUTES}. Must be 'true' or 'false', otherwise will raise this warning and be set to False.")
